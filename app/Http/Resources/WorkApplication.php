@@ -16,6 +16,7 @@ class WorkApplication extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'company' => $this->company,
             'description' => $this->description,

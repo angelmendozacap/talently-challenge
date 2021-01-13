@@ -14,4 +14,9 @@ class WorkApplication extends Model
     protected $casts = [
         'phase_id' => 'integer',
     ];
+
+    public function phase()
+    {
+        return $this->belongsTo(Phase::class);
+    }
 }

@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/applications', [WorkApplicationController::class, 'store'])->name('api.applications.store');
+Route::get('/applications/{application}', [WorkApplicationController::class, 'show'])->name('api.applications.show');
