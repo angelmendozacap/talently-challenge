@@ -30,6 +30,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $lastApplication = WorkApplication::all()->first();
 
+        $this->assertCount(1, WorkApplication::all());
         $this->assertEquals($phase->id, $lastApplication->phase_id);
 
         $res->assertCreated()->assertExactJson([
@@ -54,7 +55,6 @@ class WorkApplicationManagementTest extends TestCase
         $application = WorkApplication::factory()->create();
 
         $res = $this->getJson(route('api.applications.show', ['application' => $application->id]));
-        // dd($res->getContent());
 
         $res->assertOk()->assertExactJson([
             'data' => [
@@ -74,6 +74,42 @@ class WorkApplicationManagementTest extends TestCase
                 'application_date' => $application->application_date,
                 'created_at' => $application->created_at,
                 'updated_at' => $application->updated_at,
+            ],
+        ]);
+    }
+
+    /** @test */
+    public function user_can_update_a_work_application()
+    {
+        $this->withoutExceptionHandling();
+
+        $application = WorkApplication::factory()->create();
+
+        $res = $this->putJson(route('api.applications.update', ['application' => $application->id]), [
+            'name' => 'Developer',
+            'company' => 'Facebook',
+            'description' => 'Test Desc',
+            'application_date' => '2020-01-06'
+        ]);
+
+        $application = $application->fresh();
+
+        $this->assertCount(1, WorkApplication::all());
+
+        $res->assertOk()->assertJson([
+            'data' => [
+                'id' => $application->id,
+                'name' => $application->name,
+                'company' => $application->company,
+                'description' => $application->description,
+                'phase_id' => $application->phase_id,
+                'phase' => [
+                    'id' => $application->phase->id,
+                    'name' => $application->phase->name,
+                    'display_name' => $application->phase->display_name,
+                    'description' => $application->phase->description,
+                ],
+                'application_date' => $application->application_date,
             ],
         ]);
     }

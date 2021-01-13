@@ -51,9 +51,13 @@ class WorkApplicationController extends Controller
      * @param  \App\Models\WorkApplication  $workApplication
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, WorkApplication $workApplication)
+    public function update(Request $request, WorkApplication $application)
     {
-        //
+        $application->update($request->all());
+
+        $application->load('phase');
+
+        return new WorkApplicationResource($application);
     }
 
     /**
