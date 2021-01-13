@@ -15,6 +15,11 @@ class CreateWorkApplicationsTable extends Migration
     {
         Schema::create('work_applications', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 100);
+            $table->string('company', 100);
+            $table->text('description')->nullable();
+            $table->foreignId('phase_id')->constrained()->onUpdate('cascade');
+            $table->date('application_date')->default(now());
             $table->timestamps();
         });
     }

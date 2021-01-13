@@ -15,6 +15,9 @@ class CreatePhasesTable extends Migration
     {
         Schema::create('phases', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 100);
+            $table->string('display_name', 100);
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

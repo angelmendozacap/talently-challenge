@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Phase;
 use App\Models\WorkApplication;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +23,11 @@ class WorkApplicationFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->words(2, true),
+            'company' => $this->faker->company,
+            'description' => $this->faker->sentences(3, true),
+            'phase_id' => Phase::factory()->create(),
+            'application_date' => $this->faker->date(),
         ];
     }
 }

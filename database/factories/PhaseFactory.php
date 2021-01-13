@@ -22,7 +22,9 @@ class PhaseFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'display_name' => $name = $this->faker->word,
+            'name' => strtoupper($name),
+            'description' => $this->faker->sentences(3, true),
         ];
     }
 }
