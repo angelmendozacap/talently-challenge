@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Http\Resources\WorkApplication as WorkApplicationResource;
-use App\Models\WorkApplication;
 use Illuminate\Http\Request;
+use App\Models\WorkApplication;
+use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\WorkApplication as WorkApplicationResource;
 
 class WorkApplicationController extends Controller
 {

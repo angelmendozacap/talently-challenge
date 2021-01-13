@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Models\Phase;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PhaseController extends Controller
 {
