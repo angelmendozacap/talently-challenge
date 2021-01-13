@@ -20,16 +20,28 @@ class WorkApplicationManagementTest extends TestCase
 
         $phase = Phase::factory()->create();
 
-        $this->postJson(route('api.applications.store'), [
+        $res = $this->postJson(route('api.applications.store'), [
             'name' => 'Developer',
             'company' => 'Facebook',
             'description' => 'Test Desc',
             'phase_id' => 1,
             'application_date' => '2020-01-06'
-        ])->assertCreated();
+        ]);
 
         $lastApplication = WorkApplication::all()->first();
 
         $this->assertEquals($phase->id, $lastApplication->phase_id);
+
+        $res->assertCreated()->assertExactJson([
+            'data' => [
+                'name' => $lastApplication->name,
+                'company' => $lastApplication->company,
+                'description' => $lastApplication->description,
+                'phase_id' => $lastApplication->phase_id,
+                'application_date' => $lastApplication->application_date,
+                'created_at' => $lastApplication->created_at,
+                'updated_at' => $lastApplication->updated_at,
+            ],
+        ]);
     }
 }

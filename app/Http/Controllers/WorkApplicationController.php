@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WorkApplication as WorkApplicationResource;
 use App\Models\WorkApplication;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class WorkApplicationController extends Controller
 {
@@ -25,7 +27,9 @@ class WorkApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        return WorkApplication::create($request->all());
+        $application = WorkApplication::create($request->all());
+
+        return (new WorkApplicationResource($application))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
