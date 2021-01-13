@@ -113,4 +113,18 @@ class WorkApplicationManagementTest extends TestCase
             ],
         ]);
     }
+
+    /** @test */
+    public function user_can_delete_a_work_application()
+    {
+        $this->withoutExceptionHandling();
+
+        $application = WorkApplication::factory()->create();
+
+        $res = $this->deleteJson(route('api.applications.destroy', ['application' => $application->id]))
+            ->assertNoContent();
+
+        $this->assertCount(0, WorkApplication::all());
+        $this->assertDeleted($application);
+    }
 }

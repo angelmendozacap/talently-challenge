@@ -67,8 +67,10 @@ class WorkApplicationController extends Controller
      * @param  \App\Models\WorkApplication  $workApplication
      * @return \Illuminate\Http\Response
      */
-    public function destroy(WorkApplication $workApplication)
+    public function destroy(WorkApplication $application)
     {
-        //
+        $application->delete();
+
+        return response([], Response::HTTP_NO_CONTENT);
     }
 }
