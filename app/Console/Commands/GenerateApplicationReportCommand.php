@@ -63,5 +63,7 @@ class GenerateApplicationReportCommand extends Command
         }
 
         fclose($file);
+
+        $this->info('Successfully generated applications report.');
     }
 }
