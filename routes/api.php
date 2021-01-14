@@ -1,9 +1,14 @@
 <?php
 
-use App\Http\Controllers\API\PhaseWorkApplicationController;
-use App\Http\Controllers\API\WorkApplicationController;
+use Carbon\Carbon;
+use App\Models\Phase;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\WorkApplicationController;
+use App\Http\Controllers\API\PhaseWorkApplicationController;
+use App\Http\Controllers\API\ReportController;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,5 +33,8 @@ Route::delete('/applications/{application}', [WorkApplicationController::class, 
 
 // PhaseWorkApplication
 Route::patch('/applications/{application}/change-phase', [PhaseWorkApplicationController::class, 'change'])->name('api.phase.applications.change');
+
+// Reports
+Route::get('/generated-reports', [ReportController::class, 'index']);
 
 require __DIR__ . '/auth.php';
