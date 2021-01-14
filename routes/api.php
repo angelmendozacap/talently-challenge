@@ -28,3 +28,5 @@ Route::delete('/applications/{application}', [WorkApplicationController::class, 
 
 // PhaseWorkApplication
 Route::patch('/applications/{application}/change-phase', [PhaseWorkApplicationController::class, 'change'])->name('api.phase.applications.change');
+
+require __DIR__ . '/auth.php';
