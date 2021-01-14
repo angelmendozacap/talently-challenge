@@ -26,7 +26,7 @@ class WorkApplicationFactory extends Factory
             'name' => $this->faker->words(2, true),
             'company' => $this->faker->company,
             'description' => $this->faker->sentences(3, true),
-            'phase_id' => Phase::factory()->create(),
+            'phase_id' => Phase::factory(),
             'application_date' => $this->faker->date(),
         ];
     }
