@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\Response;
 
 class RegisteredUserController extends Controller
 {
@@ -37,9 +38,12 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-
         event(new NewUserHasRegisteredEvent($user));
 
-        return $user->createToken("user-$user->id-token")->plainTextToken;
+        $token = $user->createToken("user-$user->id-token");
+
+        return response([
+            'token' => explode('|', $token->plainTextToken, 2)[1],
+        ], Response::HTTP_CREATED);
     }
 }

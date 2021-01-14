@@ -41,7 +41,11 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        return $user->createToken("user-$user->id-token")->plainTextToken;
+        $token = $user->createToken("user-$user->id-token");
+
+        return response([
+            'token' => explode('|', $token->plainTextToken, 2)[1],
+        ], Response::HTTP_OK);
     }
 
     /**
