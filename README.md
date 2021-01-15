@@ -1,62 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Prueba técnica Talently
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+- API URL: `https://talently-challenge.herokuapp.com`
+- Default User:
+    ```json
+    {
+        "email": "cristian@talently.tech",
+        "password": "password"
+    }
+    ```
 
-## About Laravel
+## Endpoints
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Authentication
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Login [POST] `/api/v1/login`:
+    - Body:
+        ```json
+        {
+            "email": "cristian@talently.tech",
+            "password": "password"
+        }
+        ```
+    - Returns a Bearer Token:
+        ```json
+        {
+            "token": "V5dzd1YCwGgoMTIHhrQXUhWlIklLNePX4tGWzrR6"
+        }
+        ```
+2. Register [POST] `/api/v1/register`:
+    - Body:
+         ```json
+        {
+            "email": "alfredo@talently.tech",
+            "name": "Alfredo",
+            "password": "password",
+            "password_confirmation": "password"
+        }
+        ```
+    - Returns a Bearer Token:
+        ```json
+        {
+            "token": "V5dzd1YCwGgoMTIHhrQXUhWlIklLNePX4tGWzrR6"
+        }
+    - It sends an email to Mailtrap:
+        ![Mailtrap](./readme-files/mailtrap.png)
+3. Logout [POST] `/api/v1/logout`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Application
 
-## Learning Laravel
+Needs Bearer Token `Authorization: Bearer ${TOKEN}`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. [GET] `/api/v1/applications`: Get all applications of the current authenticated user.
+2. [POST] `/api/v1/applications`: Create a new application.
+    - Body:
+         ```json
+        {
+            "name": "string",
+            "description": "string",
+            "company": "string",
+            "phase_id": 1,
+            "application_date": "2021-01-12"
+        }
+        ```
+3. [GET] `/api/v1/applications/{application_id}`: Get an application.
+4. [PUT] `/api/v1/applications/{application_id}`: Update an application.
+    - Body:
+         ```json
+        {
+            "name": "string",
+            "description": "string",
+            "company": "string",
+            "phase_id": 1,
+            "application_date": "2021-01-12"
+        }
+        ```
+5. [DELETE] `/api/v1/applications/{application_id}`: Delete an application.
+6. [PATCH] `/api/v1/applications/{application_id}/change-phase`: Change the application phase.
+    - Body:
+         ```json
+        {
+            "phase_id": 1
+        }
+        ```
+7. [GET] `/api/v1/generated-reports`: Get all the report files
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+> This resources has the rule that only the authenticated user can interact with his applications. (This is validated by Policies provided by Laravel and also they are asserted in the tests).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Task Scheduler (Cron Job)
 
-### Premium Partners
+An artisan command was implemented to export a CSV file report with the quantity of applicants by phase. Command: `php artisan generate:applications-report`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+A cron job is running on the server executing the command:
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+![Mailtrap](./readme-files/cron.png)
