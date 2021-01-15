@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Phase;
 use Illuminate\Foundation\Http\FormRequest;
 
 class WorkApplicationRequest extends FormRequest
@@ -13,7 +14,7 @@ class WorkApplicationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,11 @@ class WorkApplicationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:100'],
+            'company' => ['required', 'string', 'max:100'],
+            'description' => ['required', 'string', 'nullable'],
+            'phase_id' => ['required', 'exists:' . Phase::class . ',id'],
+            'application_date' => ['required', 'date_format:Y-m-d']
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Models\WorkApplication;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\Response;
 
 class WorkApplicationManagementTest extends TestCase
 {
@@ -45,6 +46,24 @@ class WorkApplicationManagementTest extends TestCase
                 'updated_at' => $lastApplication->updated_at,
             ],
         ]);
+    }
+
+    /** @test */
+    public function name_is_required_to_create_an_application()
+    {
+        $phase = Phase::factory()->create();
+
+        $res = $this->postJson(route('api.applications.store'), [
+            'name' => '',
+            'company' => 'Facebook',
+            'description' => 'Test Desc',
+            'phase_id' => $phase->id,
+            'application_date' => '2020-01-06'
+        ]);
+
+        $this->assertCount(0, WorkApplication::all());
+
+        $res->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)->assertJsonValidationErrors('name');
     }
 
     /** @test */

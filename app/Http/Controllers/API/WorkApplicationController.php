@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Models\WorkApplication;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\WorkApplicationRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\WorkApplication as WorkApplicationResource;
 
@@ -26,7 +27,7 @@ class WorkApplicationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(WorkApplicationRequest $request)
     {
         $application = WorkApplication::create($request->all());
 
