@@ -53,7 +53,7 @@ class WorkApplicationController extends Controller
      * @param  \App\Models\WorkApplication  $workApplication
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, WorkApplication $application)
+    public function update(WorkApplicationRequest $request, WorkApplication $application)
     {
         $application->update($request->all());
 

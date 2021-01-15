@@ -21,20 +21,23 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    // Applications
+    Route::post('/applications', [WorkApplicationController::class, 'store'])->name('api.applications.store');
+    Route::get('/applications/{application}', [WorkApplicationController::class, 'show'])->name('api.applications.show');
+    Route::put('/applications/{application}', [WorkApplicationController::class, 'update'])->name('api.applications.update');
+    Route::delete('/applications/{application}', [WorkApplicationController::class, 'destroy'])->name('api.applications.destroy');
+
+    // PhaseWorkApplication
+    Route::patch('/applications/{application}/change-phase', [PhaseWorkApplicationController::class, 'change'])->name('api.phase.applications.change');
+
+    // Reports
+    Route::get('/generated-reports', [ReportController::class, 'index']);
 });
 
-// Applications
-Route::post('/applications', [WorkApplicationController::class, 'store'])->name('api.applications.store');
-Route::get('/applications/{application}', [WorkApplicationController::class, 'show'])->name('api.applications.show');
-Route::put('/applications/{application}', [WorkApplicationController::class, 'update'])->name('api.applications.update');
-Route::delete('/applications/{application}', [WorkApplicationController::class, 'destroy'])->name('api.applications.destroy');
-
-// PhaseWorkApplication
-Route::patch('/applications/{application}/change-phase', [PhaseWorkApplicationController::class, 'change'])->name('api.phase.applications.change');
-
-// Reports
-Route::get('/generated-reports', [ReportController::class, 'index']);
 
 require __DIR__ . '/auth.php';

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Phase;
+use App\Models\User;
 use App\Models\WorkApplication;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -13,11 +14,22 @@ class WorkApplicationManagementTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
 
     /** @test */
     public function user_can_create_a_work_application()
     {
         $this->withoutExceptionHandling();
+
+        $this->actingAs($this->user);
 
         $phase = Phase::factory()->create();
 
@@ -51,6 +63,8 @@ class WorkApplicationManagementTest extends TestCase
     /** @test */
     public function name_is_required_to_create_an_application()
     {
+        $this->actingAs($this->user);
+
         $phase = Phase::factory()->create();
 
         $res = $this->postJson(route('api.applications.store'), [
@@ -70,6 +84,8 @@ class WorkApplicationManagementTest extends TestCase
     public function user_can_retrieve_a_work_application()
     {
         $this->withoutExceptionHandling();
+
+        $this->actingAs($this->user);
 
         $application = WorkApplication::factory()->create();
 
@@ -102,11 +118,14 @@ class WorkApplicationManagementTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        $this->actingAs($this->user);
+
         $application = WorkApplication::factory()->create();
 
         $res = $this->putJson(route('api.applications.update', ['application' => $application->id]), [
             'name' => 'Developer',
             'company' => 'Facebook',
+            'phase_id' => 1,
             'description' => 'Test Desc',
             'application_date' => '2020-01-06'
         ]);
@@ -137,6 +156,8 @@ class WorkApplicationManagementTest extends TestCase
     public function user_can_delete_a_work_application()
     {
         $this->withoutExceptionHandling();
+
+        $this->actingAs($this->user);
 
         $application = WorkApplication::factory()->create();
 

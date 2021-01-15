@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Phase;
+use App\Models\User;
 use App\Models\WorkApplication;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -13,10 +14,21 @@ class WorkApplicationChangePhaseTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
     /** @test */
     public function user_can_change_the_work_application_phase()
     {
         $this->withoutExceptionHandling();
+
+        $this->actingAs($this->user);
 
         $phase = Phase::factory()->create();
         $anotherPhase = Phase::factory()->create();
@@ -47,6 +59,8 @@ class WorkApplicationChangePhaseTest extends TestCase
     /** @test */
     public function user_can_change_a_phase_to_another_valid_phase()
     {
+        $this->actingAs($this->user);
+
         $phase = Phase::factory()->create();
 
         // Another Phase
