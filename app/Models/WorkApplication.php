@@ -13,6 +13,7 @@ class WorkApplication extends Model
 
     protected $casts = [
         'phase_id' => 'integer',
+        'user_id' => 'integer',
     ];
 
     public function phase()

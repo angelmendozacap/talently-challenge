@@ -21,6 +21,7 @@ class WorkApplication extends JsonResource
             'company' => $this->company,
             'description' => $this->description,
             'phase_id' => $this->phase_id,
+            'user_id' => $this->user_id,
             'phase' => new PhaseResource($this->whenLoaded('phase')),
             'application_date' => $this->application_date,
             'created_at' => $this->created_at,

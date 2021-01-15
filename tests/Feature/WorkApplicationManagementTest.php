@@ -45,6 +45,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $this->assertCount(1, WorkApplication::all());
         $this->assertEquals($phase->id, $lastApplication->phase_id);
+        $this->assertEquals($this->user->id, $lastApplication->user_id);
 
         $res->assertCreated()->assertExactJson([
             'data' => [
@@ -53,6 +54,7 @@ class WorkApplicationManagementTest extends TestCase
                 'company' => $lastApplication->company,
                 'description' => $lastApplication->description,
                 'phase_id' => $lastApplication->phase_id,
+                'user_id' => $lastApplication->user_id,
                 'application_date' => $lastApplication->application_date,
                 'created_at' => $lastApplication->created_at,
                 'updated_at' => $lastApplication->updated_at,
@@ -87,7 +89,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $this->actingAs($this->user);
 
-        $application = WorkApplication::factory()->create();
+        $application = WorkApplication::factory()->create(['user_id' => $this->user->id]);
 
         $res = $this->getJson(route('api.applications.show', ['application' => $application->id]));
 
@@ -97,6 +99,7 @@ class WorkApplicationManagementTest extends TestCase
                 'name' => $application->name,
                 'company' => $application->company,
                 'description' => $application->description,
+                'user_id' => $application->user_id,
                 'phase_id' => $application->phase_id,
                 'phase' => [
                     'id' => $application->phase->id,
@@ -120,7 +123,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $this->actingAs($this->user);
 
-        $application = WorkApplication::factory()->create();
+        $application = WorkApplication::factory()->create(['user_id' => $this->user->id]);
 
         $res = $this->putJson(route('api.applications.update', ['application' => $application->id]), [
             'name' => 'Developer',
@@ -141,6 +144,7 @@ class WorkApplicationManagementTest extends TestCase
                 'company' => $application->company,
                 'description' => $application->description,
                 'phase_id' => $application->phase_id,
+                'user_id' => $application->user_id,
                 'phase' => [
                     'id' => $application->phase->id,
                     'name' => $application->phase->name,
@@ -159,7 +163,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $this->actingAs($this->user);
 
-        $application = WorkApplication::factory()->create();
+        $application = WorkApplication::factory()->create(['user_id' => $this->user->id]);
 
         $res = $this->deleteJson(route('api.applications.destroy', ['application' => $application->id]))
             ->assertNoContent();

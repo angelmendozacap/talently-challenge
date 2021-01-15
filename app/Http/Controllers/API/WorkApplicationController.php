@@ -29,7 +29,7 @@ class WorkApplicationController extends Controller
      */
     public function store(WorkApplicationRequest $request)
     {
-        $application = WorkApplication::create($request->all());
+        $application = $request->user()->applications()->create($request->all());
 
         return (new WorkApplicationResource($application))->response()->setStatusCode(Response::HTTP_CREATED);
     }

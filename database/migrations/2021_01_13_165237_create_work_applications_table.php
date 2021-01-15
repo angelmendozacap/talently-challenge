@@ -20,6 +20,7 @@ class CreateWorkApplicationsTable extends Migration
             $table->string('company', 100);
             $table->text('description')->nullable();
             $table->foreignId('phase_id')->constrained()->onUpdate('cascade');
+            $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->date('application_date');
             $table->timestamps();
         });

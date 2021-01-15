@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Phase;
+use App\Models\User;
 use App\Models\WorkApplication;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -27,6 +28,7 @@ class WorkApplicationFactory extends Factory
             'company' => $this->faker->company,
             'description' => $this->faker->sentences(3, true),
             'phase_id' => Phase::factory(),
+            'user_id' => User::factory(),
             'application_date' => $this->faker->date(),
         ];
     }
