@@ -11,6 +11,8 @@ class PhaseWorkApplicationController extends Controller
 {
     public function change(ChangeApplicationPhaseRequest $request, WorkApplication $application)
     {
+        $this->authorize('update', $application);
+
         $application->update($request->all());
 
         $application->load('phase');

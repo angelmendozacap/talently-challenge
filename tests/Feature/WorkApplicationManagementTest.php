@@ -117,6 +117,19 @@ class WorkApplicationManagementTest extends TestCase
     }
 
     /** @test */
+    public function only_the_owner_can_retrieve_his_work_application()
+    {
+        $this->actingAs($this->user);
+
+        $anotherUser = User::factory()->create();
+        $application = WorkApplication::factory()->create(['user_id' => $anotherUser->id]);
+
+        $res = $this->getJson(route('api.applications.show', ['application' => $application->id]));
+
+        $res->assertForbidden();
+    }
+
+    /** @test */
     public function user_can_update_a_work_application()
     {
         $this->withoutExceptionHandling();
@@ -157,6 +170,25 @@ class WorkApplicationManagementTest extends TestCase
     }
 
     /** @test */
+    public function only_the_owner_can_update_his_application()
+    {
+        $this->actingAs($this->user);
+
+        $anotherUser = User::factory()->create();
+        $application = WorkApplication::factory()->create(['user_id' => $anotherUser->id]);
+
+        $res = $this->putJson(route('api.applications.update', ['application' => $application->id]), [
+            'name' => 'Developer',
+            'company' => 'Facebook',
+            'phase_id' => 1,
+            'description' => 'Test Desc',
+            'application_date' => '2020-01-06'
+        ]);
+
+        $res->assertForbidden();
+    }
+
+    /** @test */
     public function user_can_delete_a_work_application()
     {
         $this->withoutExceptionHandling();
@@ -170,5 +202,19 @@ class WorkApplicationManagementTest extends TestCase
 
         $this->assertCount(0, WorkApplication::all());
         $this->assertDeleted($application);
+    }
+
+    /** @test */
+    public function only_the_owner_can_delete_his_work_application()
+    {
+        $this->actingAs($this->user);
+
+        $anotherUser = User::factory()->create();
+        $application = WorkApplication::factory()->create(['user_id' => $anotherUser->id]);
+
+        $res = $this->deleteJson(route('api.applications.destroy', ['application' => $application->id]))
+            ->assertForbidden();
+
+        $this->assertCount(1, WorkApplication::all());
     }
 }

@@ -33,11 +33,14 @@ class WorkApplicationChangePhaseTest extends TestCase
         $phase = Phase::factory()->create();
         $anotherPhase = Phase::factory()->create();
 
-        $application = WorkApplication::factory()->create(['phase_id' => $phase->id]);
+        $application = WorkApplication::factory()->create([
+            'user_id' => $this->user->id,
+            'phase_id' => $phase->id,
+        ]);
 
         $res = $this->patchJson(route('api.phase.applications.change', ['application' => $application->id]), [
             'phase_id' => $anotherPhase->id,
-        ])->assertOk();
+        ]);
 
         $application = $application->fresh();
 
@@ -57,6 +60,25 @@ class WorkApplicationChangePhaseTest extends TestCase
     }
 
     /** @test */
+    public function only_the_owner_can_change_his_work_application_phase()
+    {
+        $this->actingAs($this->user);
+
+        $phase = Phase::factory()->create();
+        $anotherPhase = Phase::factory()->create();
+
+        $anotherUser = User::factory()->create();
+        $application = WorkApplication::factory()->create([
+            'user_id' => $anotherUser->id,
+            'phase_id' => $phase->id,
+        ]);
+
+        $res = $this->patchJson(route('api.phase.applications.change', ['application' => $application->id]), [
+            'phase_id' => $anotherPhase->id,
+        ])->assertForbidden();
+    }
+
+    /** @test */
     public function user_can_change_a_phase_to_another_valid_phase()
     {
         $this->actingAs($this->user);
@@ -67,7 +89,10 @@ class WorkApplicationChangePhaseTest extends TestCase
         Phase::factory()->create();
         $fakeIDPhase = 5;
 
-        $application = WorkApplication::factory()->create(['phase_id' => $phase->id]);
+        $application = WorkApplication::factory()->create([
+            'user_id' => $this->user->id,
+            'phase_id' => $phase->id,
+        ]);
 
         $res = $this->patchJson(route('api.phase.applications.change', ['application' => $application->id]), [
             'phase_id' => $fakeIDPhase,

@@ -42,6 +42,8 @@ class WorkApplicationController extends Controller
      */
     public function show(WorkApplication $application)
     {
+        $this->authorize('view', $application);
+
         $application->load('phase');
         return new WorkApplicationResource($application);
     }
@@ -55,6 +57,8 @@ class WorkApplicationController extends Controller
      */
     public function update(WorkApplicationRequest $request, WorkApplication $application)
     {
+        $this->authorize('update', $application);
+
         $application->update($request->all());
 
         $application->load('phase');
@@ -70,6 +74,8 @@ class WorkApplicationController extends Controller
      */
     public function destroy(WorkApplication $application)
     {
+        $this->authorize('delete', $application);
+
         $application->delete();
 
         return response([], Response::HTTP_NO_CONTENT);
