@@ -23,6 +23,53 @@ class WorkApplicationManagementTest extends TestCase
         $this->user = User::factory()->create();
     }
 
+    /** @test */
+    public function user_can_retrieve_his_work_applications()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->actingAs($this->user);
+
+        $applications = WorkApplication::factory()->times(2)->create(['user_id' => $this->user->id]);
+
+        $res = $this->getJson(route('api.applications.index'));
+
+        // dd($res->getContent());
+        $res->assertOk()->assertJson([
+            'data' => [
+                [
+                    'id' => $applications->first()->id,
+                    'name' => $applications->first()->name,
+                    'company' => $applications->first()->company,
+                    'description' => $applications->first()->description,
+                    'user_id' => $applications->first()->user_id,
+                    'phase_id' => $applications->first()->phase_id,
+                    'phase' => [
+                        'id' => $applications->first()->phase->id,
+                        'name' => $applications->first()->phase->name,
+                        'display_name' => $applications->first()->phase->display_name,
+                        'description' => $applications->first()->phase->description,
+                    ],
+                    'application_date' => $applications->first()->application_date,
+                ],
+                [
+                    'id' => $applications->last()->id,
+                    'name' => $applications->last()->name,
+                    'company' => $applications->last()->company,
+                    'description' => $applications->last()->description,
+                    'user_id' => $applications->last()->user_id,
+                    'phase_id' => $applications->last()->phase_id,
+                    'phase' => [
+                        'id' => $applications->last()->phase->id,
+                        'name' => $applications->last()->phase->name,
+                        'display_name' => $applications->last()->phase->display_name,
+                        'description' => $applications->last()->phase->description,
+                    ],
+                    'application_date' => $applications->last()->application_date,
+                ],
+            ],
+        ]);
+    }
 
     /** @test */
     public function user_can_create_a_work_application()

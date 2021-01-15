@@ -27,6 +27,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Applications
+    Route::get('/applications', [WorkApplicationController::class, 'index'])->name('api.applications.index');
     Route::post('/applications', [WorkApplicationController::class, 'store'])->name('api.applications.store');
     Route::get('/applications/{application}', [WorkApplicationController::class, 'show'])->name('api.applications.show');
     Route::put('/applications/{application}', [WorkApplicationController::class, 'update'])->name('api.applications.update');

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\WorkApplicationRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\WorkApplication as WorkApplicationResource;
+use App\Http\Resources\WorkApplicationCollection;
 
 class WorkApplicationController extends Controller
 {
@@ -18,7 +19,8 @@ class WorkApplicationController extends Controller
      */
     public function index()
     {
-        //
+        $applications = request()->user()->applications->load('phase');
+        return new WorkApplicationCollection($applications);
     }
 
     /**
