@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Models\WorkApplication;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangeApplicationPhaseRequest;
 use App\Http\Resources\WorkApplication as WorkApplicationResource;
 
 class PhaseWorkApplicationController extends Controller
 {
-    public function change(Request $request, WorkApplication $application)
+    public function change(ChangeApplicationPhaseRequest $request, WorkApplication $application)
     {
         $application->update($request->all());
 

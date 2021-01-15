@@ -7,6 +7,7 @@ use App\Models\WorkApplication;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\Response;
 
 class WorkApplicationChangePhaseTest extends TestCase
 {
@@ -41,5 +42,24 @@ class WorkApplicationChangePhaseTest extends TestCase
                 'application_date' => $application->application_date,
             ],
         ]);
+    }
+
+    /** @test */
+    public function user_can_change_a_phase_to_another_valid_phase()
+    {
+        $phase = Phase::factory()->create();
+
+        // Another Phase
+        Phase::factory()->create();
+        $fakeIDPhase = 5;
+
+        $application = WorkApplication::factory()->create(['phase_id' => $phase->id]);
+
+        $res = $this->patchJson(route('api.phase.applications.change', ['application' => $application->id]), [
+            'phase_id' => $fakeIDPhase,
+        ]);
+
+        $res->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors('phase_id');
     }
 }
