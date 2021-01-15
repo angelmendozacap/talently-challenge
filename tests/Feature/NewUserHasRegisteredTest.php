@@ -22,7 +22,7 @@ class NewUserHasRegisteredTest extends TestCase
 
         Mail::fake();
 
-        $this->postJson('/api/register', $this->data())->assertCreated();
+        $this->postJson('/api/v1/register', $this->data())->assertCreated();
 
         $lastUser = User::all()->first();
 
@@ -39,7 +39,7 @@ class NewUserHasRegisteredTest extends TestCase
 
         Event::fake();
 
-        $this->postJson('/api/register', $this->data())->assertCreated();
+        $this->postJson('/api/v1/register', $this->data())->assertCreated();
 
         Event::assertDispatched(NewUserHasRegisteredEvent::class);
     }

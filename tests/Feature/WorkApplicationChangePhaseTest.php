@@ -38,7 +38,7 @@ class WorkApplicationChangePhaseTest extends TestCase
             'phase_id' => $phase->id,
         ]);
 
-        $res = $this->patchJson(route('api.phase.applications.change', ['application' => $application->id]), [
+        $res = $this->patchJson(route('v1.phase.applications.change', ['application' => $application->id]), [
             'phase_id' => $anotherPhase->id,
         ]);
 
@@ -73,7 +73,7 @@ class WorkApplicationChangePhaseTest extends TestCase
             'phase_id' => $phase->id,
         ]);
 
-        $res = $this->patchJson(route('api.phase.applications.change', ['application' => $application->id]), [
+        $res = $this->patchJson(route('v1.phase.applications.change', ['application' => $application->id]), [
             'phase_id' => $anotherPhase->id,
         ])->assertForbidden();
     }
@@ -94,7 +94,7 @@ class WorkApplicationChangePhaseTest extends TestCase
             'phase_id' => $phase->id,
         ]);
 
-        $res = $this->patchJson(route('api.phase.applications.change', ['application' => $application->id]), [
+        $res = $this->patchJson(route('v1.phase.applications.change', ['application' => $application->id]), [
             'phase_id' => $fakeIDPhase,
         ]);
 

@@ -32,7 +32,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $applications = WorkApplication::factory()->times(2)->create(['user_id' => $this->user->id]);
 
-        $res = $this->getJson(route('api.applications.index'));
+        $res = $this->getJson(route('v1.applications.index'));
 
         // dd($res->getContent());
         $res->assertOk()->assertJson([
@@ -80,7 +80,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $phase = Phase::factory()->create();
 
-        $res = $this->postJson(route('api.applications.store'), [
+        $res = $this->postJson(route('v1.applications.store'), [
             'name' => 'Developer',
             'company' => 'Facebook',
             'description' => 'Test Desc',
@@ -116,7 +116,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $phase = Phase::factory()->create();
 
-        $res = $this->postJson(route('api.applications.store'), [
+        $res = $this->postJson(route('v1.applications.store'), [
             'name' => '',
             'company' => 'Facebook',
             'description' => 'Test Desc',
@@ -138,7 +138,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $application = WorkApplication::factory()->create(['user_id' => $this->user->id]);
 
-        $res = $this->getJson(route('api.applications.show', ['application' => $application->id]));
+        $res = $this->getJson(route('v1.applications.show', ['application' => $application->id]));
 
         $res->assertOk()->assertExactJson([
             'data' => [
@@ -171,7 +171,7 @@ class WorkApplicationManagementTest extends TestCase
         $anotherUser = User::factory()->create();
         $application = WorkApplication::factory()->create(['user_id' => $anotherUser->id]);
 
-        $res = $this->getJson(route('api.applications.show', ['application' => $application->id]));
+        $res = $this->getJson(route('v1.applications.show', ['application' => $application->id]));
 
         $res->assertForbidden();
     }
@@ -185,7 +185,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $application = WorkApplication::factory()->create(['user_id' => $this->user->id]);
 
-        $res = $this->putJson(route('api.applications.update', ['application' => $application->id]), [
+        $res = $this->putJson(route('v1.applications.update', ['application' => $application->id]), [
             'name' => 'Developer',
             'company' => 'Facebook',
             'phase_id' => 1,
@@ -224,7 +224,7 @@ class WorkApplicationManagementTest extends TestCase
         $anotherUser = User::factory()->create();
         $application = WorkApplication::factory()->create(['user_id' => $anotherUser->id]);
 
-        $res = $this->putJson(route('api.applications.update', ['application' => $application->id]), [
+        $res = $this->putJson(route('v1.applications.update', ['application' => $application->id]), [
             'name' => 'Developer',
             'company' => 'Facebook',
             'phase_id' => 1,
@@ -244,7 +244,7 @@ class WorkApplicationManagementTest extends TestCase
 
         $application = WorkApplication::factory()->create(['user_id' => $this->user->id]);
 
-        $res = $this->deleteJson(route('api.applications.destroy', ['application' => $application->id]))
+        $res = $this->deleteJson(route('v1.applications.destroy', ['application' => $application->id]))
             ->assertNoContent();
 
         $this->assertCount(0, WorkApplication::all());
@@ -259,7 +259,7 @@ class WorkApplicationManagementTest extends TestCase
         $anotherUser = User::factory()->create();
         $application = WorkApplication::factory()->create(['user_id' => $anotherUser->id]);
 
-        $res = $this->deleteJson(route('api.applications.destroy', ['application' => $application->id]))
+        $res = $this->deleteJson(route('v1.applications.destroy', ['application' => $application->id]))
             ->assertForbidden();
 
         $this->assertCount(1, WorkApplication::all());

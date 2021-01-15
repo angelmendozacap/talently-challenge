@@ -1,14 +1,10 @@
 <?php
 
-use Carbon\Carbon;
-use App\Models\Phase;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\WorkApplicationController;
-use App\Http\Controllers\API\PhaseWorkApplicationController;
-use App\Http\Controllers\API\ReportController;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\API\V1\WorkApplicationController;
+use App\Http\Controllers\API\V1\PhaseWorkApplicationController;
+use App\Http\Controllers\API\V1\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,24 +17,24 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'v1'], function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
     // Applications
-    Route::get('/applications', [WorkApplicationController::class, 'index'])->name('api.applications.index');
-    Route::post('/applications', [WorkApplicationController::class, 'store'])->name('api.applications.store');
-    Route::get('/applications/{application}', [WorkApplicationController::class, 'show'])->name('api.applications.show');
-    Route::put('/applications/{application}', [WorkApplicationController::class, 'update'])->name('api.applications.update');
-    Route::delete('/applications/{application}', [WorkApplicationController::class, 'destroy'])->name('api.applications.destroy');
+    Route::get('/applications', [WorkApplicationController::class, 'index'])->name('v1.applications.index');
+    Route::post('/applications', [WorkApplicationController::class, 'store'])->name('v1.applications.store');
+    Route::get('/applications/{application}', [WorkApplicationController::class, 'show'])->name('v1.applications.show');
+    Route::put('/applications/{application}', [WorkApplicationController::class, 'update'])->name('v1.applications.update');
+    Route::delete('/applications/{application}', [WorkApplicationController::class, 'destroy'])->name('v1.applications.destroy');
 
     // PhaseWorkApplication
-    Route::patch('/applications/{application}/change-phase', [PhaseWorkApplicationController::class, 'change'])->name('api.phase.applications.change');
+    Route::patch('/applications/{application}/change-phase', [PhaseWorkApplicationController::class, 'change'])->name('v1.phase.applications.change');
 
     // Reports
     Route::get('/generated-reports', [ReportController::class, 'index']);
-});
 
+});
 
 require __DIR__ . '/auth.php';
